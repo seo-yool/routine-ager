@@ -689,6 +689,21 @@ a:focus-visible {
   cursor: pointer;
 }
 
+/* 카드 오른쪽 위 회전 안내 아이콘 */
+.flip-card-front {
+  position: absolute;
+}
+
+.flip-hint {
+  position: absolute;
+  top: 16px;
+  right: 18px;
+  font-size: 1.6rem;
+  line-height: 1;
+  color: var(--teal);
+  pointer-events: none;
+}
+
 /* 실제로 회전하는 부분 */
 .flip-card-inner {
   position: relative;
@@ -765,10 +780,19 @@ a:focus-visible {
 
 /* 푸터 로고 */
 .footer-logo {
-  width: 240px;
+  width: 200px;
   max-width: 100%;
   height: auto;
   transform: translateX(-80px);
+}
+
+/* 푸터 오른쪽 안내 문구 */
+.site-footer p {
+  font-size: 0.7rem;
+}
+/* 푸터 오른쪽 안내 문구 위치 조정 */
+.site-footer .col-lg-4 {
+  transform: translateX(80px);
 }
 
 /* ===================== 팝업 ===================== */
@@ -989,6 +1013,16 @@ a:focus-visible {
     margin-bottom: 10px;
   }
 }
+
+/* ===================== 섹션 4: 모바일 카드 여백 ===================== */
+
+@media (max-width: 767px) {
+  #about .row {
+    margin-left: 12px;
+    margin-right: 12px;
+  }
+}
+
 /* ===================== 푸터 모바일 반응형 ===================== */
 
 /* 스마트폰에서는 로고가 잘리지 않도록 위치 조정 */
@@ -996,5 +1030,18 @@ a:focus-visible {
   .footer-logo {
     transform: translateX(0);
     max-width: 100%;
+  }
+}
+/* 모바일에서는 안내 문구 위치 초기화 */
+@media (max-width: 767px) {
+  .site-footer .col-lg-4 {
+    transform: translateX(0);
+  }
+}
+/* 모바일에서만 푸터 로고 크기 줄이기 */
+@media (max-width: 767px) {
+  .footer-logo {
+    width: 150px;
+    height: auto;
   }
 }
