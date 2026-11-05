@@ -375,3 +375,34 @@ function renderAll() {
 // 페이지가 처음 열릴 때 화면을 그리고 첫 번째 질문을 보여 줌
 renderAll();
 renderQuestion();
+
+
+/* ===================== 섹션 4: 플립 카드 ===================== */
+
+// 플립 카드 요소 선택
+const flipCards = document.querySelectorAll(".flip-card");
+
+// 각 카드에 뒤집기 기능 적용
+flipCards.forEach((card) => {
+
+  // 카드 앞면과 뒷면 전환
+  function flipCard() {
+    card.classList.toggle("flipped");
+    card.setAttribute(
+      "aria-pressed",
+      String(card.classList.contains("flipped"))
+    );
+  }
+
+  // 클릭 또는 터치 시 카드 뒤집기
+  card.addEventListener("click", flipCard);
+
+  // 키보드 Enter, Space 키 지원
+  card.addEventListener("keydown", (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      flipCard();
+    }
+  });
+
+});

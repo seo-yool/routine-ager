@@ -679,19 +679,96 @@ a:focus-visible {
   line-height: 1.6;
 }
 
+
+/* ===================== 플립 카드 효과 ===================== */
+
+/* 카드 전체 */
+.flip-card {
+  height: 300px;
+  perspective: 1000px;
+  cursor: pointer;
+}
+
+/* 실제로 회전하는 부분 */
+.flip-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.7s ease;
+  transform-style: preserve-3d;
+}
+
+/* 뒤집힌 상태 */
+.flip-card.flipped .flip-card-inner {
+  transform: rotateY(180deg);
+}
+
+/* 카드 앞면과 뒷면 공통 */
+.flip-card-front,
+.flip-card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  padding: 40px 24px;
+  border-radius: var(--radius-card);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* 카드 앞면 */
+.flip-card-front {
+  background: var(--white);
+  color: var(--teal);
+}
+
+/* 카드 뒷면 */
+.flip-card-back {
+  background: var(--teal);
+  color: var(--cream);
+  transform: rotateY(180deg);
+}
+
+/* 카드 뒷면 제목과 설명 */
+.flip-card-back .step-title,
+.flip-card-back .step-text {
+  color: var(--cream);
+}
+
+/* 움직임 최소화 설정을 사용하는 경우 */
+@media (prefers-reduced-motion: reduce) {
+  .flip-card-inner {
+    transition: none;
+  }
+}
+
+
 /* ===================== 푸터 ===================== */
-/* 푸터 바탕과 여백 */
+
+/* 푸터 배경과 세로 중앙 정렬 */
 .site-footer {
-  padding: 24px 0;
+  padding: 36px 0;
   background: var(--teal);
   color: var(--cream);
 }
 
+/* 푸터 내부 세로 중앙 정렬 */
+.site-footer .row {
+  align-items: center;
+}
+
 /* 푸터 로고 */
 .footer-logo {
-  display: block;
-  width: clamp(120px, 12vw, 180px);
+  width: 240px;
+  max-width: 100%;
   height: auto;
+  transform: translateX(-80px);
 }
 
 /* ===================== 팝업 ===================== */
@@ -887,5 +964,37 @@ a:focus-visible {
   /* 버튼 여백을 줄여 입력칸과 한 줄에 놓음 */
   .routine-form .btn {
     --bs-btn-padding-x: 16px;
+  }
+}
+
+/* ===================== 섹션 4: 모바일 반응형 ===================== */
+
+/* 스마트폰 화면에서 카드 높이와 여백 조절 */
+@media (max-width: 767px) {
+  .flip-card {
+    height: 220px;
+  }
+
+  .flip-card-front,
+  .flip-card-back {
+    padding: 24px 20px;
+  }
+
+  .flip-card .step-icon {
+    font-size: 2.5rem;
+    margin-bottom: 12px;
+  }
+
+  .flip-card .step-number {
+    margin-bottom: 10px;
+  }
+}
+/* ===================== 푸터 모바일 반응형 ===================== */
+
+/* 스마트폰에서는 로고가 잘리지 않도록 위치 조정 */
+@media (max-width: 767px) {
+  .footer-logo {
+    transform: translateX(0);
+    max-width: 100%;
   }
 }
