@@ -815,17 +815,30 @@ a:focus-visible {
     font-size: 0.9375rem;
   }
 
-  /* 할 일 칸과 손이 한 화면에 같이 보이도록 손 그림을 작게 함 */
+  /* 휴대폰: 손을 화면의 주인공으로 크게 보여 줌 */
   .hand-svg,
   .hand-image {
-    max-width: 96px;
+    width: 62vw;
+    max-width: 260px;
   }
 
-  /* 휴대폰: 할 일 칸 높이를 줄여 한 화면에 들어오게 함 */
+  /* 휴대폰: 할 일 칸 높이와 X 버튼 자리를 줄이고, 옆 칸과 높이를 맞춤 */
   .task-item {
-    min-height: 48px;
-    padding-top: 8px;
-    padding-bottom: 8px;
+    gap: 8px;
+    height: 100%;
+    min-height: 52px;
+    padding: 8px 40px 8px 12px;
+  }
+
+  /* 빈칸은 X 버튼이 없어서 좌우 여백을 같게 함 */
+  .task-item.is-empty {
+    min-width: 0;
+    padding-right: 12px;
+  }
+
+  /* X 버튼을 칸 오른쪽 끝에 붙임 */
+  .task-remove {
+    right: 4px;
   }
 
   /* 휴대폰: 판 배치를 풀고 손, 할 일 칸 순서로 세로로 쌓음 */
@@ -845,10 +858,10 @@ a:focus-visible {
     transform: none;
   }
 
-  /* 할 일 칸을 세로로 가운데 정렬 */
+  /* 할 일 칸을 2칸씩 나란히 놓음 */
   .task-list {
     display: grid;
-    justify-items: center;
+    grid-template-columns: 1fr 1fr;
     gap: 8px;
   }
 
@@ -859,8 +872,16 @@ a:focus-visible {
     right: auto;
     bottom: auto;
     left: auto;
+    width: 100%;
     max-width: 100%;
     transform: none;
+  }
+
+  /* 다섯 번째 칸: 다른 칸과 같은 폭으로 맨 아래 가운데에 놓음 */
+  .task-row:nth-child(5) {
+    grid-column: 1 / -1;
+    justify-self: center;
+    width: calc(50% - 4px);
   }
 
   /* 버튼 여백을 줄여 입력칸과 한 줄에 놓음 */
