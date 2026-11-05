@@ -682,7 +682,7 @@ a:focus-visible {
 /* ===================== 푸터 ===================== */
 /* 푸터 바탕과 여백 */
 .site-footer {
-  padding: 96px 0 48px;
+  padding: 24px 0;
   background: var(--teal);
   color: var(--cream);
 }
