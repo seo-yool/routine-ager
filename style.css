@@ -477,6 +477,14 @@ a:focus-visible {
   line-height: 1;
 }
 
+/* 4번째 섹션 카드 이미지 */
+.flip-card .step-icon img {
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
+  display: block;
+}
+
 /* 카드 왼쪽 위 작은 숫자 */
 .step-number {
   position: absolute;
