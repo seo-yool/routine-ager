@@ -605,7 +605,12 @@ a:focus-visible {
     transition: none;
   }
 }
-
+/* 4번째 섹션: 모바일 카드 사이 간격 줄이기 */
+@media (max-width: 767px) {
+  #about .mobile-card-gap {
+    --bs-gutter-y: 16px;
+  }
+}
 
 /* ===================== 푸터 ===================== */
 
