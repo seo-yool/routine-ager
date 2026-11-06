@@ -857,3 +857,691 @@ a:focus-visible {
     margin-bottom: 0;
   }
 }
+
+/* ===================================================================
+   [수정] ADHD 테스트 섹션: 캐릭터와 결과 화면
+   위쪽에 있는 기존 .quiz-box 규칙은 그대로 두고, 아래에서 필요한 부분만 덮어씁니다.
+   (같은 규칙이 겹치면 더 아래에 있는 것이 적용됩니다)
+   =================================================================== */
+
+/* 하얀 칸과 캐릭터를 함께 묶는 틀. position: relative 덕분에 캐릭터를 이 틀 기준으로 놓을 수 있음 */
+.quiz-wrap {
+  position: relative;
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+/* 하얀 칸: 질문 화면과 결과 화면의 높이를 비슷하게 맞추고, 내용을 칸 가운데에 놓음 */
+.quiz-box {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 440px;           /* 칸의 최소 높이 */
+  padding: 28px 32px;          /* [수정] 위아래 여백 40 -> 28px: 그림이 커져도 칸이 늘어나지 않게 */
+}
+
+/* [수정] 섹션 3 설명 문구: 두 줄이 되면 줄 길이를 비슷하게 맞추고 단어 중간에서 끊기지 않게 함 */
+#test .section-text {
+  text-wrap: balance;
+  word-break: keep-all;
+}
+
+/* 캐릭터 이미지 공통: 칸 모서리에 겹쳐 놓고, 클릭은 칸으로 통과시킴 */
+.quiz-char {
+  position: absolute;          /* 틀(.quiz-wrap) 기준으로 위치를 정함 */
+  z-index: 2;                  /* 칸보다 위에 보이게 */
+  height: auto;                /* 가로 크기에 맞춰 세로가 자동으로 정해짐 */
+  pointer-events: none;
+}
+/* 오른쪽 위 구름 캐릭터: 칸 바깥으로 살짝 튀어나오게 */
+.quiz-char-right {
+  width: 140px;
+  right: -40px;
+  top: -66px;
+}
+/* 왼쪽 아래 별 캐릭터 */
+.quiz-char-left {
+  width: 104px;
+  left: -36px;
+  bottom: -40px;
+}
+
+/* [수정] 결과 단계 이름 (예: LEVEL 2 · ADHD력 중간): 작고 은은하게. 칸이 커지지 않도록 글씨(.85->.8rem)와 아래 간격(12->8px)을 줄임 */
+.quiz-result-label {
+  margin: 0 0 8px;
+  font-size: .8rem;
+  font-weight: var(--weight-strong);
+  opacity: .7;
+}
+/* [수정] 결과 멘트(큰 글씨): 캐릭터가 커진 만큼 글씨를 줄임 (1.3~1.6rem -> 1.05~1.3rem)
+   text-align: 가운데 정렬 / text-wrap: balance: 두 줄이 되면 줄 길이를 비슷하게 맞춤 / word-break: keep-all: 단어 중간에서 줄이 바뀌지 않게 함 */
+.quiz-result-title {
+  margin: 0 0 4px;
+  font-family: var(--font-title);
+  font-size: clamp(1.05rem, 3.2vw, 1.3rem);
+  line-height: 1.35;
+  text-align: center;
+  text-wrap: balance;
+  word-break: keep-all;
+}
+/* [수정] 결과 설명 (멘트 아래 한 줄): 글씨 1.05 -> .92rem, 아래 간격 20 -> 12px로 줄이고 가운데 정렬 */
+.quiz-result-sub {
+  max-width: 40ch;
+  margin: 0 auto 12px;
+  font-size: .92rem;
+  font-weight: var(--weight-strong);
+  line-height: 1.55;
+  text-align: center;
+  text-wrap: balance;
+  word-break: keep-all;
+}
+
+/* [수정] 결과 그림: 단계 이름과 멘트 사이. 높이 112 -> 128px로 약 14% 키움. 대신 주변 글씨와 여백을 줄여 칸 높이는 그대로 유지 */
+.quiz-result-image {
+  align-self: center;
+  height: 128px;
+  width: auto;
+  max-width: 100%;             /* 좁은 화면에서도 칸 밖으로 나가지 않게 */
+  margin: 0 0 6px;
+}
+
+/* [수정] 안내 "잠깐! 이 테스트는 ADHD 진단을 내리는 검사가 아닙니다...": 읽을 수 있는 작은 글씨 */
+.quiz-notice-text {
+  max-width: 44ch;
+  margin: 0 auto 8px;          /* 아래 간격 14 -> 8px */
+  font-size: .8rem;            /* .85 -> .8rem (칸 높이 유지) */
+  line-height: 1.55;
+  opacity: .85;
+  text-align: center;
+  text-wrap: balance;
+  word-break: keep-all;
+}
+
+/* [수정] 테두리 버튼 (답 버튼과 "이전" 버튼 공통)
+   - 기본: 흰 바탕 + 진한 청록색 테두리(2px)와 글자 -> 흰 칸 위에서도 선이 또렷하게 보임
+   - 마우스를 올리면: 예전 답 버튼 색(진한 청록색)으로 채워지고 글자는 크림색이 됨 */
+.btn-outline-teal {
+  --bs-btn-color: var(--teal);
+  --bs-btn-border-color: var(--teal);
+  --bs-btn-hover-bg: var(--teal);
+  --bs-btn-hover-color: var(--cream);
+  --bs-btn-hover-border-color: var(--teal);
+  --bs-btn-active-bg: var(--teal);
+  --bs-btn-active-color: var(--cream);
+  --bs-btn-active-border-color: var(--teal);
+  --bs-btn-disabled-color: var(--teal);
+  --bs-btn-disabled-border-color: var(--teal);
+  background: var(--white);    /* 이전에는 transparent(투명)였음 */
+  border-width: 2px;           /* 선이 잘 보이도록 */
+}
+/* 누르는 순간과 키보드로 선택했을 때도 같은 색으로 바뀜 */
+.btn-outline-teal:active,
+.btn-outline-teal:focus-visible {
+  background: var(--teal);
+  color: var(--cream);
+  border-color: var(--teal);
+}
+/* 마우스를 올렸을 때 색 바꾸기. 터치 화면은 손가락을 뗀 뒤에도 색이 남을 수 있어서, 마우스가 있는 기기에서만 적용 */
+@media (hover: hover) {
+  .btn-outline-teal:hover {
+    background: var(--teal);
+    color: var(--cream);
+    border-color: var(--teal);
+  }
+}
+
+/* [수정] 질문 문장: 글자를 5px 줄임 (24px -> 19px) */
+.quiz-question {
+  margin-bottom: 16px;         /* 20 -> 16px */
+  font-size: .9375rem;         /* [수정] 한 번 더 4px 줄임 (19px -> 15px) */
+  word-break: keep-all;        /* 단어 중간에서 줄이 바뀌지 않게 */
+}
+
+/* [수정] 답 버튼 3개: 글자에 맞게 작게 줄이고(높이 약 43px), 가운데에 같은 너비로 맞춤 */
+.quiz-answer {
+  --bs-btn-padding-y: 8px;     /* 위의 .btn 기본값(48px 높이)보다 작게 */
+  --bs-btn-padding-x: 20px;
+  --bs-btn-font-size: .95rem;
+  width: min(100%, 280px);     /* 최대 280px, 칸이 좁으면 칸 너비에 맞춤 */
+  justify-self: center;        /* grid 안에서 가운데로 */
+}
+
+/* [수정] "이전" 버튼: 답 버튼 아래, 칸 가운데. 답 버튼보다 작은 테두리 버튼 (색 변화는 위의 .btn-outline-teal이 담당) */
+.quiz-prev {
+  --bs-btn-padding-y: 6px;     /* 위의 .btn 기본값(48px 높이)보다 작게 */
+  --bs-btn-padding-x: 22px;
+  --bs-btn-font-size: .9rem;
+  align-self: center;
+  margin: 16px 0 6px;
+}
+.quiz-prev.is-hidden {
+  visibility: hidden;          /* 첫 질문에서는 보이지 않고 누를 수도 없음 (자리만 남김) */
+}
+
+/* [수정] "다시 테스트하기" 버튼: 칸 가운데에 놓고 위쪽 링크와 간격을 둠 */
+.quiz-retry {
+  --bs-btn-padding-y: 7px;     /* 버튼 높이를 조금 줄여 칸이 커지지 않게 함 */
+  --bs-btn-padding-x: 22px;
+  --bs-btn-font-size: .9rem;
+  align-self: center;
+  margin-top: 8px;             /* 18 -> 8px */
+}
+
+/* [수정] 휴대폰(너비 575px 이하): 하얀 칸을 더 작게 줄이고, 구름 캐릭터가 위쪽 설명 글자와 겹치지 않게 함 */
+@media (max-width: 575px) {
+  /* 칸 너비: 화면보다 40px 줄여 좌우에 여백을 더 줌 (이전 24px) */
+  /* padding-top: 설명 글자와 칸 사이를 28px 더 벌려서 구름이 들어갈 자리를 만듦 */
+  .quiz-wrap { width: calc(100% - 40px); padding-top: 28px; }
+  /* 칸 안쪽 위아래 여백을 줄임 */
+  .quiz-box { min-height: 0; padding: 22px 16px; }   /* [수정] 위아래 여백 26 -> 22px */
+  .quiz-question { margin-bottom: 16px; }
+  .quiz-answer { width: min(100%, 240px); }
+  /* 첫 질문에서는 "이전" 버튼이 자리까지 없어지게 해서, 답 버튼 아래 빈 공간이 생기지 않게 함 */
+  .quiz-prev.is-hidden { display: none; }
+  .quiz-link { margin-top: 8px; }                    /* [수정] 12 -> 8px */
+  .quiz-retry { margin-top: 6px; }                   /* [수정] 휴대폰에서는 버튼 위 간격을 더 줄임 */
+  .quiz-result-image { height: 100px; } /* [수정] 휴대폰 결과 그림 88 -> 100px (약 14% 키움) */
+  /* 구름: 크기를 조금 줄이고 오른쪽으로 옮김. top은 위 padding-top(28px) 때문에 칸 위쪽에서 12px 위 정도에 놓임 */
+  .quiz-char-right { width: 84px; right: -16px; top: -12px; }
+  .quiz-char-left { width: 68px; left: -8px; bottom: -34px; }
+}
+
+/* ===================================================================
+   [추가 수정] 섹션 3: 결과 캐릭터를 중간 크기로 키우고, 하얀 칸 크기는 고정
+   - 캐릭터(.quiz-result-image): PC 128 -> 160px, 휴대폰 100 -> 120px
+   - 그림이 커진 만큼 글씨(단계 이름, 멘트, 설명, 안내)를 조금 줄여 칸이 늘어나지 않게 함
+   - 하얀 칸(.quiz-box)은 min-height 대신 height로 고정: 질문 화면, 결과 화면(낮음/중간/높음) 모두 같은 크기
+   (위의 기존 규칙은 그대로 두고, 같은 규칙이 겹치면 아래에 있는 것이 적용되는 점을 이용해 덮어씀)
+   =================================================================== */
+.quiz-box {
+  height: 440px;               /* 고정 높이. 내용이 바뀌어도 칸은 움직이지 않음 */
+  min-height: 0;
+  padding: 24px 32px;
+}
+.quiz-result-image {
+  height: 160px;               /* 중간 크기 (이전 128px) */
+  margin: 0 0 4px;
+}
+.quiz-result-label  { margin-bottom: 6px; font-size: .75rem; }
+.quiz-result-title  { font-size: clamp(1rem, 3vw, 1.15rem); }
+.quiz-result-sub    { margin-bottom: 8px; font-size: .84rem; line-height: 1.45; }
+.quiz-notice-text   { margin-bottom: 4px; font-size: .72rem; line-height: 1.45; }
+.quiz-link          { margin-top: 10px; font-size: .88rem; }
+.quiz-retry         { margin-top: 6px; }
+
+@media (max-width: 575px) {
+  .quiz-box { height: 400px; padding: 18px 14px; }   /* 휴대폰도 고정 높이 */
+  .quiz-result-image { height: 120px; }              /* 중간 크기 (이전 100px) */
+  .quiz-result-label  { font-size: .72rem; }
+  .quiz-result-title  { font-size: 1rem; }
+  .quiz-result-sub    { font-size: .8rem; margin-bottom: 6px; }
+  .quiz-notice-text   { font-size: .7rem; }
+  .quiz-link          { margin-top: 6px; font-size: .84rem; }
+  .quiz-retry         { margin-top: 4px; }
+}
+
+/* ===================================================================
+   [추가 수정 2] 섹션 3: 결과 캐릭터를 더 크게 (하얀 칸 안에서 벗어나지 않게)
+   - 캐릭터(.quiz-result-image): PC 160 -> 200px, 휴대폰 120 -> 150px (하얀 칸 높이 440px / 400px는 그대로)
+   - 커진 만큼 글씨와 위아래 여백을 한 번 더 줄여 칸 안에 들어가게 함
+   - max-width: 칸 너비를 넘지 않게 / object-fit: contain: 그림이 잘리지 않게
+   =================================================================== */
+.quiz-box { padding: 20px 32px; }
+.quiz-result-image { height: 200px; max-width: 100%; object-fit: contain; margin: 0 0 2px; }
+.quiz-result-label { margin-bottom: 4px; }
+.quiz-result-title { font-size: clamp(.95rem, 2.8vw, 1.08rem); line-height: 1.3; }
+.quiz-result-sub   { font-size: .8rem; line-height: 1.4; margin-bottom: 6px; }
+.quiz-notice-text  { font-size: .68rem; line-height: 1.4; margin-bottom: 2px; }
+.quiz-link         { margin-top: 6px; font-size: .84rem; }
+.quiz-retry        { margin-top: 4px; --bs-btn-padding-y: 6px; }
+
+@media (max-width: 575px) {
+  .quiz-box { padding: 14px 12px; }
+  .quiz-result-image { height: 150px; }                /* 휴대폰: 120 -> 150px */
+  .quiz-result-title { font-size: .95rem; }
+  .quiz-result-sub   { font-size: .76rem; margin-bottom: 4px; }
+  .quiz-notice-text  { font-size: .66rem; }
+  .quiz-link         { margin-top: 4px; font-size: .8rem; }
+}
+
+/* ===================================================================
+   [추가 수정 3] 섹션 3: 터치(모바일)에서도 답 버튼 색이 바뀌게 함
+   - 마우스를 올렸을 때(hover)의 색과 같은 색을, 누른 버튼(.is-selected)에 항상 적용
+   - hover는 마우스 기기에서만 동작해서, 터치 화면에서는 script.js가 붙여 주는 is-selected로 색을 바꿈
+   - 터치 시 파란 눌림 표시(tap highlight)는 끔
+   =================================================================== */
+.btn-outline-teal.is-selected,
+.btn-outline-teal.is-selected:hover {
+  background: var(--teal);
+  color: var(--cream);
+  border-color: var(--teal);
+}
+.quiz-answer {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+/* ===================================================================
+   [추가 수정 4] 섹션 3: 시작 전 안내 / 진행 막대 / 이전 답 표시 / 결과 팁·도움 안내·루틴 버튼
+                         / 결과 색 포인트 / 부드러운 전환 / 카드 가장자리
+   - 결과 화면에 팁, 도움 안내, 버튼이 늘어난 만큼 하얀 칸 높이를 키움 (PC 440 -> 540px, 휴대폰 400 -> 560px)
+     단, 질문 화면과 결과 화면의 칸 높이는 여전히 같게 고정
+   =================================================================== */
+
+/* 카드 가장자리: 크림 배경 위에서 경계가 또렷하게 아주 연한 테두리와 그림자 */
+.quiz-box {
+  height: 540px;
+  border: 1px solid rgba(2, 52, 63, 0.08);
+  box-shadow: 0 8px 24px rgba(2, 52, 63, 0.08);
+}
+
+/* 시작 전 안내 화면 */
+.quiz-intro-title {
+  margin: 0 0 12px;
+  font-family: var(--font-title);
+  font-size: 1.6rem;
+  line-height: 1.3;
+}
+.quiz-intro-info {
+  margin: 0 0 24px;
+  font-size: .95rem;
+  font-weight: var(--weight-strong);
+  opacity: .75;
+}
+.quiz-start {
+  align-self: center;
+  min-width: 160px;
+}
+
+/* 진행 막대: "순서 1 / 5" 아래의 가는 청록색 막대 */
+.quiz-progress {
+  width: min(100%, 280px);
+  height: 6px;
+  margin: 0 auto 20px;
+  border-radius: 999px;
+  background: rgba(2, 52, 63, 0.12);
+  overflow: hidden;
+}
+.quiz-progress-fill {
+  width: 0;
+  height: 100%;
+  border-radius: 999px;
+  background: var(--teal);
+  transition: width .4s ease;
+}
+
+/* "이전"으로 돌아왔을 때 방금 고른 답: 은은한 크림색 바탕 + 점선 테두리 (마우스를 올리면 평소처럼 채워짐) */
+.quiz-answer.is-previous {
+  background: var(--cream);
+  border-style: dashed;
+}
+
+/* 결과 단계 이름: 결과 색(초록/노랑/분홍)을 깐 작은 알약 모양. 색은 script.js가 정해 줌 */
+.quiz-result-label {
+  align-self: center;
+  padding: 3px 14px;
+  border-radius: 999px;
+  opacity: 1;
+  color: var(--teal);
+}
+
+/* 결과별 한 줄 팁 */
+.quiz-tip {
+  max-width: 44ch;
+  margin: 0 auto 6px;
+  font-size: .8rem;
+  line-height: 1.45;
+  text-align: center;
+  text-wrap: balance;
+  word-break: keep-all;
+}
+
+/* 높음 결과의 도움 안내 자리 */
+.quiz-help {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  margin: 2px auto 4px;
+  padding: 8px 14px;
+  border-radius: var(--radius-small);
+  background: var(--cream-soft);
+  font-size: .78rem;
+  font-weight: var(--weight-strong);
+  text-align: center;
+}
+.quiz-help-find {
+  padding: 3px 12px;
+  border: 1px dashed var(--teal);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--teal);
+  font-size: .75rem;
+  opacity: .6;           /* 준비 중이라 흐리게 */
+}
+
+/* 결과의 버튼 두 개: "오늘 루틴 5개 만들어 보기"(주 버튼) + "다시 테스트하기" */
+.quiz-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+.quiz-routine,
+.quiz-buttons .quiz-retry {
+  --bs-btn-padding-y: 7px;
+  --bs-btn-padding-x: 18px;
+  --bs-btn-font-size: .88rem;
+  margin: 0;
+}
+.quiz-buttons + .quiz-link { margin-top: 8px; font-size: .8rem; }
+
+/* 부드러운 전환: 질문/결과가 바뀔 때 가볍게 나타나고, 결과 그림은 살짝 튀어나오듯 등장.
+   움직임을 줄이도록 설정한 사용자(prefers-reduced-motion)에게는 적용하지 않음 */
+@keyframes quizFade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+@keyframes quizPop  { 0% { opacity: 0; transform: scale(.85); } 60% { opacity: 1; transform: scale(1.05); } 100% { transform: scale(1); } }
+@media (prefers-reduced-motion: no-preference) {
+  .quiz-box > * { animation: quizFade .25s ease both; }
+  .quiz-box > .quiz-result-image { animation: quizPop .45s cubic-bezier(.34, 1.56, .64, 1) both; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .quiz-progress-fill { transition: none; }
+}
+
+@media (max-width: 575px) {
+  .quiz-box { height: 580px; }
+  .quiz-intro-title { font-size: 1.3rem; }
+  .quiz-progress { margin-bottom: 16px; }
+  .quiz-result-image { height: 130px; }   /* 휴대폰: 칸 안에 모두 들어가도록 150 -> 130px */
+  .quiz-tip { font-size: .74rem; }
+  .quiz-help { font-size: .72rem; padding: 6px 10px; }
+  .quiz-routine, .quiz-buttons .quiz-retry { --bs-btn-padding-x: 14px; --bs-btn-font-size: .82rem; }
+}
+
+/* ===================================================================
+   [추가 수정 5] 섹션 3 결과: 버튼 두 개를 세로로 정렬
+   - "오늘 루틴 5개 만들어 보기" 위, "다시 테스트하기" 아래. 두 버튼 너비를 같게 맞춤
+   =================================================================== */
+.quiz-buttons {
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+.quiz-routine,
+.quiz-buttons .quiz-retry {
+  width: min(100%, 240px);
+}
+/* 버튼이 세로로 쌓여 높이가 늘어난 만큼 컴퓨터 화면의 하얀 칸 높이를 540 -> 580px로 조정 (휴대폰은 580px 그대로) */
+.quiz-box { height: 580px; }
+
+/* ===================================================================
+   [추가 수정 6] 섹션 3 결과 화면을 새 구성안(참고 이미지)대로 변경
+   1) 시작하기를 누르면 섹션 3 머리말을 숨기고, 하얀 칸을 더 크게 (#test.is-started)
+   2) 결과 칸 구성: 단계 알약 > 큰 제목 2줄 > 큰 그림 > 굵은 설명 > 팁 상자 > 루틴 버튼 > 글자 버튼(다시 테스트하기) > 건강한 루틴 링크
+   3) "진단이 아닙니다" 안내는 하얀 칸 아래 가운데에 아주 작고 희미하게 (.quiz-foot-notice)
+   4) "건강한 루틴을 만들어 보고 싶다면 →" 링크는 하얀 칸 맨 아래에 붙이고, 위 요소와 간격을 항상 둠 (PC·모바일 공통)
+   - 위쪽의 예전 규칙과 겹치는 부분은 이 블록이 맨 아래라서 이 블록이 적용됨
+   =================================================================== */
+
+/* --- 하얀 칸 크기: 시작 전(안내 화면)은 작게, 시작한 뒤에는 머리말이 사라진 만큼 크게 --- */
+#test .quiz-box { height: 460px; }
+#test.is-started .quiz-box { height: 790px; }   /* PC: 시작한 뒤 질문·결과 화면 높이 */
+#test.is-started { padding-top: 80px; }          /* 머리말이 사라져도 구름 캐릭터가 잘리지 않게 위 여백 유지 */
+#test.is-started .section-head { display: none; }
+
+/* --- 결과: 단계 알약 --- */
+.quiz-result-label {
+  margin: 0 0 10px;
+  padding: 5px 18px;
+  font-size: .85rem;
+  font-weight: 800;
+}
+
+/* --- 결과: 큰 제목 두 줄 (위 줄 크게 / 아래 줄 작게). 굵은 고딕체 --- */
+.quiz-result-title {
+  margin: 0 0 8px;
+  font-family: "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  font-size: 1rem;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--teal);
+}
+.quiz-result-title-main { display: block; font-size: 2.4rem; font-weight: 900; line-height: 1.15; }
+.quiz-result-title-sub  { display: block; margin-top: 4px; font-size: 1.3rem; font-weight: 800; }
+
+/* --- 결과: 그림 (칸이 커진 만큼 크게) --- */
+.quiz-result-image { height: 260px; margin: 0 0 6px; }
+
+/* --- 결과: 그림 아래 설명 (굵게) --- */
+.quiz-result-sub {
+  max-width: none;
+  margin: 0 auto 14px;
+  font-size: 1.05rem;
+  font-weight: 800;
+  line-height: 1.45;
+}
+
+/* --- 결과: 팁 상자 (바탕색은 script.js가 결과별로 넣음) --- */
+.quiz-tip {
+  width: 100%;
+  max-width: 460px;
+  margin: 0 auto 12px;
+  padding: 14px 20px;
+  border-radius: var(--radius-small);
+  text-align: left;
+}
+.quiz-tip-head { margin: 0 0 4px; font-size: 1rem; font-weight: 800; }
+.quiz-tip-body { margin: 0; font-size: .95rem; line-height: 1.6; white-space: pre-line; }
+.quiz-tip-body strong { font-weight: 800; }
+
+/* --- 높음 결과의 도움 안내 (조금 크게) --- */
+.quiz-help { max-width: 460px; width: 100%; margin: 0 auto 12px; font-size: .85rem; }
+.quiz-help-find { font-size: .8rem; }
+
+/* --- 루틴 버튼: 넓은 주 버튼 --- */
+.quiz-routine {
+  --bs-btn-padding-y: 12px;
+  --bs-btn-font-size: 1rem;
+  width: min(100%, 320px);
+  margin: 4px auto 0;
+}
+
+/* --- 다시 테스트하기: 상자 없이 글자만 있는 버튼 --- */
+.quiz-retry {
+  align-self: center;
+  margin: 6px 0 0;
+  padding: 8px 14px;
+  border: 0;
+  background: none;
+  color: var(--teal);
+  font-size: .9rem;
+  font-weight: 700;
+  opacity: .65;
+}
+.quiz-retry:hover { opacity: 1; text-decoration: underline; text-underline-offset: 4px; }
+
+/* --- 건강한 루틴 링크: 하얀 칸 맨 아래에 붙이고, 위 요소와는 항상 간격 --- */
+.quiz-box .quiz-retry ~ .quiz-link {
+  margin-top: auto;
+  padding-top: 14px;
+  font-size: .9rem;
+}
+
+/* --- 하얀 칸 아래 안내 문구: 아주 작고 희미한 고딕체, 가운데 정렬 --- */
+.quiz-foot-notice {
+  max-width: 640px;
+  min-height: 3em;               /* 안 보일 때도 자리를 남겨 화면이 덜컥 움직이지 않음 */
+  margin: 36px auto 0;
+  padding: 0 8px;
+  font-family: "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  font-size: .75rem;
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--teal);
+  opacity: .5;
+  text-align: center;
+  text-wrap: balance;
+  word-break: keep-all;
+  visibility: hidden;
+}
+.quiz-foot-notice.is-visible { visibility: visible; }
+
+/* --- 휴대폰 --- */
+@media (max-width: 575px) {
+  #test .quiz-box { height: 460px; padding: 18px 16px; }
+  #test.is-started .quiz-box { height: 700px; }      /* 휴대폰: 시작한 뒤 높이 */
+  #test.is-started { padding-top: 56px; }
+  .quiz-result-label { font-size: .8rem; padding: 4px 16px; }
+  .quiz-result-title-main { font-size: 1.9rem; }
+  .quiz-result-title-sub { font-size: 1.1rem; }
+  .quiz-result-image { height: 200px; }
+  .quiz-result-sub { font-size: .95rem; margin-bottom: 12px; }
+  .quiz-tip { padding: 12px 16px; margin-bottom: 10px; }
+  .quiz-tip-head { font-size: .95rem; }
+  .quiz-tip-body { font-size: .9rem; }
+  .quiz-help { font-size: .78rem; padding: 6px 10px; }
+  .quiz-routine { --bs-btn-padding-y: 11px; --bs-btn-font-size: .95rem; --bs-btn-padding-x: 16px; }
+  .quiz-box .quiz-retry ~ .quiz-link { padding-top: 12px; font-size: .85rem; }
+  .quiz-foot-notice { margin-top: 44px; font-size: .72rem; } /* 왼쪽 아래 별 캐릭터와 겹치지 않게 */
+}
+
+/* ===================================================================
+   [추가 수정 7] 섹션 3
+   1) 팁 상자: 안의 글자를 가운데 정렬하고 상자 폭에 맞춰 줄바꿈
+   2) "다시 테스트하기": 실선 테두리 버튼 (script.js에서 btn-outline-teal을 붙임)
+   3) 결과 화면: 내용을 하얀 칸 세로 중앙에 두고 요소 사이를 고르게 띄움 (.is-result), 휴대폰에서는 결과가 화면 가운데 오도록 스크롤
+   4) 질문 화면: "건강한 루틴을 만들어 보고 싶다면 →" 링크를 이전 버튼 아래로 더 띄움.
+      휴대폰에서 "이전" 버튼이 첫 질문에서 자리까지 사라져 링크 위치가 달라지던 것도 자리를 유지해서 맞춤
+   =================================================================== */
+
+/* 1) 팁 상자 가운데 정렬 */
+.quiz-tip { text-align: center; }
+.quiz-tip-head, .quiz-tip-body {
+  text-align: center;
+  text-wrap: balance;
+  word-break: keep-all;
+}
+
+/* 2) 다시 테스트하기: 실선 테두리 버튼 (루틴 버튼과 같은 너비) */
+.quiz-box .quiz-retry {
+  width: min(100%, 320px);
+  margin: 10px auto 0;
+  padding: 10px 16px;
+  border: 2px solid var(--teal);
+  border-radius: var(--radius-card);
+  background: var(--white);
+  color: var(--teal);
+  font-size: .95rem;
+  font-weight: 700;
+  opacity: 1;
+  text-decoration: none;
+}
+
+/* 3) 결과 화면: 위·아래·요소 사이 여백을 고르게. 링크는 더 이상 맨 아래로 밀지 않고 버튼 아래에 적당한 간격으로 둠 */
+.quiz-box.is-result { justify-content: space-evenly; }
+.quiz-box.is-result .quiz-retry ~ .quiz-link { margin-top: 0; padding-top: 0; }
+.quiz-box.is-result > * { margin-top: 0; }
+.quiz-box.is-result .quiz-routine { margin-top: 0; }
+.quiz-box.is-result .quiz-retry { margin-top: 0; }
+
+/* 4) 질문 화면: 링크를 이전 버튼 아래로 더 띄움 (PC·휴대폰 공통) */
+.quiz-box .quiz-prev ~ .quiz-link { margin-top: 28px; }
+
+@media (max-width: 575px) {
+  /* 휴대폰: 첫 질문에서도 "이전" 버튼 자리를 유지(보이지만 않음)해서, 질문이 바뀌어도 링크 위치가 같게 */
+  .quiz-prev.is-hidden { display: inline-block; visibility: hidden; }
+  .quiz-box .quiz-prev ~ .quiz-link { margin-top: 32px; }
+}
+
+/* [추가 수정 8] 섹션 3 전용 글꼴
+   - 글꼴 파일은 석주님 프로젝트의 fonts 폴더에 있는 TTF 파일을 사용
+   - 제목: Ownglyph Corncorn
+   - 본문·버튼: LINE Seed KR
+*/
+@font-face {
+  font-family: "Ownglyph Corncorn";
+  src: url("fonts/Ownglyph-Corncorn.ttf") format("truetype");
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "LINE Seed KR";
+  src: url("fonts/LINESeedKR-Th.ttf") format("truetype");
+  font-weight: 100;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "LINE Seed KR";
+  src: url("fonts/LINESeedKR-Rg.ttf") format("truetype");
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "LINE Seed KR";
+  src: url("fonts/LINESeedKR-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-display: swap;
+}
+#test {
+  --font-display: "Ownglyph corncorn", "Jua", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  --font-ui: "LINE Seed KR", "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  font-family: var(--font-ui);
+  font-weight: 400;
+  font-synthesis: none;
+}
+#test .btn,
+#test button,
+#test input { font-family: var(--font-ui); }
+
+/* 섹션 머리말(시작 전에 보이는 인사) */
+#test .section-eyebrow { font-weight: 700; letter-spacing: .1em; opacity: .75; }
+#test .section-head .section-title { font-family: var(--font-display); font-weight: 400; font-size: clamp(2.2rem, 4.4vw, 3.9rem); letter-spacing: 0; }
+#test .section-text { font-weight: 400; }
+
+/* 시작 화면 */
+#test .quiz-intro-title { font-family: var(--font-display); font-weight: 400; font-size: 2.3rem; line-height: 1.25; letter-spacing: 0; }
+#test .quiz-intro-info { font-weight: 400; opacity: .8; }
+#test .quiz-start { font-weight: 700; }
+
+/* 질문 화면 */
+#test .quiz-step { font-weight: 700; }
+#test .quiz-question { font-weight: 700; }
+#test .quiz-answer,
+#test .quiz-prev { font-weight: 700; }
+#test .quiz-link { font-weight: 400; }
+
+/* 결과 화면 */
+#test .quiz-result-label { font-weight: 700; }
+#test .quiz-result-title { font-family: var(--font-display); font-weight: 400; letter-spacing: 0; }
+#test .quiz-result-title-main { font-weight: 400; font-size: 3rem; line-height: 1.1; }
+#test .quiz-result-title-sub { font-weight: 400; font-size: 1.7rem; margin-top: 2px; }
+#test .quiz-result-sub { font-weight: 700; }
+#test .quiz-tip-head { font-weight: 700; }
+#test .quiz-tip-body { font-weight: 400; }
+#test .quiz-tip-body strong { font-weight: 700; }
+#test .quiz-help-phone { font-weight: 700; }
+#test .quiz-help-find { font-weight: 400; }
+#test .quiz-routine,
+#test .quiz-retry { font-weight: 700; }
+
+/* 하얀 칸 아래 안내: 가장 얇은 글꼴로 아주 작고 희미하게 */
+.quiz-foot-notice { font-family: "LINE Seed KR", "Noto Sans KR", sans-serif; font-weight: 100; opacity: .7; font-size: .78rem; }
+
+@media (max-width: 575px) {
+  #test .quiz-intro-title { font-size: 1.9rem; }
+  #test .quiz-result-title-main { font-size: 2.4rem; }
+  #test .quiz-result-title-sub { font-size: 1.4rem; }
+}
+
+/* 글꼴이 바뀌면서 결과 칸(특히 높음)이 빽빽해져, 시작한 뒤 하얀 칸 높이를 조금 키움 (컴퓨터 790 -> 800px, 휴대폰 700 -> 780px) */
+#test.is-started .quiz-box { height: 800px; }
+@media (max-width: 575px) {
+  #test.is-started .quiz-box { height: 780px; }
+}
+
+/* [추가 수정 9] 섹션 3: 첫 질문에도 "처음으로" 버튼이 보이게 되어, 예전의 첫 질문 "이전" 버튼 숨김(.is-hidden)은 더 쓰지 않음 (스타일은 지워도 되지만 그대로 둠) */
+#test .quiz-intro-title { text-wrap: balance; }

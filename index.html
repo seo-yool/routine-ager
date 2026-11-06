@@ -18,7 +18,7 @@
       script.js가 내용을 채워 넣습니다.
 
     페이지 순서: 첫 화면(헤더 포함) > 다섯 손가락 체험 > ADHD력 테스트
-                 > 서비스 소개 > 푸터 (+ 팝업 3개)
+                 > 이용 방법 > 푸터 (+ 팝업 3개)
     ===================================================================
   -->
   <!-- 휴대폰에서도 화면 폭에 맞게 보이게 하는 설정 -->
@@ -60,7 +60,6 @@
           </button>
           <div class="collapse navbar-collapse" id="raMenu">
             <ul class="navbar-nav ra-menu ms-auto">
-              <li class="nav-item"><a class="ra-nav-link" href="#about">서비스 소개</a></li>
               <li class="nav-item"><a class="ra-nav-link" href="#about">이용 방법</a></li>
               <li class="nav-item"><a class="ra-nav-link" href="#try">리워드</a></li>
               <li class="nav-item"><button class="ra-nav-link" type="button" data-bs-toggle="modal" data-bs-target="#raLoginModal">로그인</button></li>
@@ -169,14 +168,27 @@
         <div class="section-head">
           <p class="section-eyebrow" lang="en">ADHD TEST</p>
           <h2 class="section-title">ADHD력 테스트</h2>
-          <p class="section-text">여기에 설명 문구가 들어갑니다. (임시 문구)</p>
+          <!-- [수정] 설명 문구를 다시 바꿈. 한 문장이라 줄바꿈(<br>)은 뺐고, 화면 폭에 따라 자연스럽게 줄이 바뀜 -->
+          <p class="section-text">나의 집중 습관과 일상 패턴을 살펴보고 루틴으로 극복해요!!</p>
         </div>
         <!-- 질문과 결과가 이 칸 안에서 바뀜 (script.js가 채움) -->
-        <div id="quizBox" class="quiz-box" tabindex="-1"></div>
+        <div class="quiz-wrap">
+          <!-- [수정] 하얀 칸(quizBox)을 quiz-wrap으로 감싸고, 칸 모서리에 캐릭터 이미지 2개를 추가함.
+               quiz-wrap은 캐릭터를 칸 기준으로 놓기 위한 틀이고, 위치와 크기는 style.css의 .quiz-char 에서 조정함.
+               캐릭터는 꾸밈용이라 alt를 비워 두어 화면 읽기 프로그램이 건너뜀 -->
+          <!-- [수정] 오른쪽 위: 책을 든 구름 캐릭터 (이미지를 바꾸려면 src의 파일 이름을 바꾸면 됨) -->
+          <img class="quiz-char quiz-char-right" src="images/quiz-cloud.png" alt="" width="420" height="306">
+          <!-- [수정] 왼쪽 아래: 민트색 별 캐릭터 -->
+          <img class="quiz-char quiz-char-left" src="images/quiz-star.png" alt="" width="360" height="394">
+          <!-- 질문과 결과가 이 칸 안에서 바뀜 (script.js가 채움). 원래 있던 칸이고, 위의 quiz-wrap 안으로 옮겨짐 -->
+          <div id="quizBox" class="quiz-box" tabindex="-1"></div>
+        </div>
+        <!-- [추가 수정 6] 하얀 칸 아래의 작은 안내 문구. 결과가 중간·높음일 때만 보임 (script.js가 문구를 채움) -->
+        <p id="quizNotice" class="quiz-foot-notice"></p>
       </div>
     </section>
 
-    <!-- ===================== 섹션 4: 서비스 소개 ===================== -->
+    <!-- ===================== 섹션 4: 이용 방법 ===================== -->
     <section id="about" class="section section-paper">
       <div class="container">
         <!-- 섹션 머리말: 섹션 2, 3과 같은 형식 -->
