@@ -518,13 +518,15 @@ a:focus-visible {
   position: absolute;
 }
 
-.flip-hint {
-  position: absolute;
-  top: 16px;
-  right: 18px;
-  font-size: 1.6rem;
-  line-height: 1;
+/* 카드 설명 아래 가운데 화살표 */
+.flip-card-front .flip-hint {
+  position: static;
+  display: block;
+  width: 16px;
+  height: 7px;
+  margin: 10px auto 0;
   color: var(--teal);
+  line-height: 0;
   pointer-events: none;
 }
 
@@ -761,28 +763,7 @@ a:focus-visible {
   }
 }
 
-/* ===================== 섹션 4: 모바일 반응형 ===================== */
 
-/* 스마트폰 화면에서 카드 높이와 여백 조절 */
-@media (max-width: 767px) {
-  .flip-card {
-    height: 160px;
-  }
-
-  .flip-card-front,
-  .flip-card-back {
-    padding: 24px 20px;
-  }
-
-  .flip-card .step-icon {
-    font-size: 2.5rem;
-    margin-bottom: 12px;
-  }
-
-  .flip-card .step-number {
-    margin-bottom: 10px;
-  }
-}
 
 /* ===================== 섹션 4: 모바일 카드 여백 ===================== */
 
@@ -821,7 +802,7 @@ a:focus-visible {
 
   /* 카드 세로 높이 */
   .flip-card {
-    height: 160px;
+    height: 140px;
   }
 
   /* 카드 앞면과 뒷면의 내부 여백 */
