@@ -477,16 +477,25 @@ a:focus-visible {
   line-height: 1;
 }
 
-/* 카드 번호: 청록색 알약 모양 */
+/* 카드 왼쪽 위 작은 숫자 */
 .step-number {
-  display: inline-block;
-  margin-bottom: 16px;
-  padding: 4px 14px;
-  border-radius: 999px;
-  background: var(--teal);
-  color: var(--cream);
-  font-size: 0.9375rem;
-  font-weight: var(--weight-strong);
+  position: absolute;
+  top: 16px;
+  left: 18px;
+
+  display: block;
+  width: auto;
+  height: auto;
+  margin: 0;
+  padding: 0;
+
+  background: transparent;
+  border: none;
+  border-radius: 0;
+
+  color: var(--teal);
+  font-size: 18px;
+  font-weight: 400;
 }
 
 /* 카드 제목 */
