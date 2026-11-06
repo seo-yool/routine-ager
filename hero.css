@@ -1,0 +1,155 @@
+/* ============================================================
+   지현 담당 | Routineager 메인 v6
+   적용 범위: .ra-hero와 ra- 접두사 컴포넌트 / 모바일 우선
+   01 폰트 → 02 헤더·핵심 문구 → 03 티켓 → 04 버튼·그림 → 05 반응형
+   팀 공통 CSS 뒤에 이 파일을 연결하세요. 공통 CSS를 덮어쓰지 않습니다.
+   ============================================================ */
+/* [01 폰트] 사용자 첨부 글꼴. 경로 변경 시 fonts/ 세 파일도 함께 옮깁니다. */
+@font-face { font-family: "LINE Seed KR"; src: url("fonts/LINESeedKR-Regular.ttf") format("truetype"); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: "LINE Seed KR"; src: url("fonts/LINESeedKR-Bold.ttf") format("truetype"); font-weight: 700; font-style: normal; font-display: swap; }
+@font-face { font-family: "Ownglyph Corncorn"; src: url("fonts/Ownglyph-Corncorn.ttf") format("truetype"); font-weight: 400; font-style: normal; font-display: swap; }
+.ra-hero {
+  --ra-ink: #02343F; /* 주 컬러 */
+  --ra-cream: #f0edcc;
+  --ra-white: #fff9ed;
+  --ra-mint: #ace9d9;
+  position: relative;
+  min-height: 100vh;
+  min-height: 100svh;
+  overflow: hidden;
+  background: radial-gradient(ellipse at 75% 65%, #06575a66, transparent 68%), #02343F; /* 바탕은 주 컬러 */
+  color: var(--ra-white);
+  font-family: "LINE Seed KR", sans-serif;
+  font-weight: 400;
+  font-synthesis: none;
+  word-break: keep-all;
+}
+.ra-hero *, .ra-hero *::before, .ra-hero *::after { box-sizing: border-box; }
+.ra-hero a { text-decoration: none; }
+.ra-hero a:focus-visible, .ra-hero button:focus-visible { outline: 3px solid #f5c96a; outline-offset: 4px; }
+/* [02 헤더·핵심 문구] 제목은 LINE Seed KR 700, 나머지 문구는 400. */
+.ra-nav { position: absolute; inset: 0 0 auto; z-index: 10; padding: 19px 0; }
+.ra-nav-inner { width: calc(100% - 40px); max-width: 1440px; padding: 0; }
+.ra-brand { display: inline-flex; align-items: center; line-height: 0; }
+.ra-brand-image { display: block; width: 210px; height: auto; }
+.ra-menu-toggle { border: 1px solid #aadcd18c; color: var(--ra-white); padding: 5px 11px; font-size: 24px; line-height: 1.3; }
+.ra-menu-toggle:focus { box-shadow: 0 0 0 3px #a4ece155; }
+.ra-hero #raMenu { margin-top: 12px; padding: 14px 20px; background: #013c3ff7; border: 1px solid #a4ece133; border-radius: 16px; box-shadow: 0 16px 28px #002b2f40; }
+.ra-menu { align-items: stretch; gap: 4px; }
+.ra-nav-link, .ra-nav-signup { display: block; width: 100%; padding: 9px 0; border: 0; color: #fffaf0; background: none; font-family: inherit; font-size: 16px; font-weight: 400; text-align: left; white-space: nowrap; line-height: 1.4; }
+.ra-nav-link:hover { color: var(--ra-mint); }
+.ra-nav-signup { width: auto; padding: 11px 24px; margin-top: 8px; border-radius: 50px; background: var(--ra-cream); color: var(--ra-ink); text-align: center; }
+.ra-nav-signup:hover { background: #fff8e5; }
+/* 모바일은 문구 → 버튼 → 전체 일러스트 순서입니다. */
+.ra-canvas { position: relative; width: 100%; max-width: 1440px; padding: 100px 0 10px; margin: 0 auto; }
+.ra-copy { position: relative; z-index: 2; width: calc(100% - 44px); max-width: 540px; margin: 0 auto; }
+.ra-eyebrow { display: flex; align-items: center; gap: 12px; margin: 0 0 15px; color: #e3efe8; font-size: clamp(12px, 3.4vw, 15px); font-weight: 400; letter-spacing: -.025em; white-space: nowrap; }
+.ra-eyebrow span { flex: 1; max-width: 64px; height: 1px; background: #c6dfd0a6; }
+.ra-title { margin: 0 0 18px; color: var(--ra-white); font-family: "LINE Seed KR", sans-serif; font-size: clamp(27px, 8.5vw, 42px); font-weight: 700; line-height: 1.25; letter-spacing: -.04em; }
+.ra-title-lead, .ra-title-focus { display: block; font-weight: 700; }
+.ra-title-lead { margin-bottom: 3px; font-size: .83em; }
+.ra-title-lead strong { font-weight: 700; }
+.ra-title-focus em { color: var(--ra-mint); font-style: normal; }
+/* ============================================================
+   [지현 메인 03] 승인 A 리워드 티켓
+   --ra-ticket-scale: 100%가 승인 시안 기본 크기, 현재 95%로 5% 축소.
+   너비에 맞춰 높이와 문구도 같은 비율로 줄어듭니다.
+   메인 제목(.ra-title)은 그대로 유지하여 제목의 우선순위를 지킵니다.
+   ============================================================ */
+.ra-ticket {
+  --ra-ticket-scale: 95%;
+  position: relative;
+  width: var(--ra-ticket-scale);
+  aspect-ratio: 1990 / 510;
+  margin: 0 0 20px;
+  container-type: inline-size;
+  color: var(--ra-ink);
+}
+/* 생성 PNG의 투명 여백만 CSS 표시 영역에서 제외합니다.
+   티켓 전체 모양/손바닥 로고는 유지하며 원본 파일은 손대지 않습니다. */
+.ra-ticket-art { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+.ra-ticket-art img {
+  position: absolute;
+  left: -3.0151%; top: -25.4902%;
+  width: 105.4272%; height: 146.8627%;
+  max-width: none;
+}
+/* 문구는 왼쪽 본체 안에만 배치합니다. 오른쪽 21%는 로고용 절취 조각입니다.
+   cqw는 티켓 너비 기준 단위라 모바일·PC 모두 같은 비율로 맞습니다. */
+.ra-ticket-copy {
+  position: absolute; inset: 19% 21% 19% 6.5%;
+  display: flex; flex-direction: column; justify-content: center; gap: 2cqw;
+  margin: 0;
+}
+.ra-ticket-context {
+  display: block;
+  font-family: "LINE Seed KR", sans-serif;
+  font-size: 3.7cqw; font-weight: 400; line-height: 1.2;
+  letter-spacing: -.025em; white-space: nowrap;
+}
+.ra-ticket-reward {
+  display: block;
+  font-family: "Ownglyph Corncorn", sans-serif;
+  font-size: 8.7cqw; font-weight: 400; line-height: 1;
+  letter-spacing: 0; white-space: nowrap;
+}
+/* [지현 메인 03 끝] */
+.ra-description { margin: 0 0 20px; color: #e2eee7; font-size: clamp(13px, 3.55vw, 17px); font-weight: 400; line-height: 1.7; letter-spacing: -.025em; }
+/* [04 버튼·그림] CTA는 기존 팀 섹션/가입 모달로 연결합니다. */
+.ra-actions { display: flex; align-items: center; gap: 12px; }
+.ra-button { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 48px; padding: 12px 14px; border: 1.5px solid transparent; border-radius: 100px; font-family: inherit; font-size: clamp(14px, 3.8vw, 18px); font-weight: 400; line-height: 1.3; white-space: nowrap; transition: background .2s, transform .2s; }
+.ra-button-primary { flex: 1.15; background: var(--ra-cream); color: var(--ra-ink); }
+.ra-button-primary span { font-weight: 400; font-family: Arial, sans-serif; font-size: 1.3em; }
+.ra-button-secondary { flex: 1; border-color: #d8eee3bd; color: var(--ra-white); background: transparent; }
+.ra-button-primary:hover { color: var(--ra-ink); background: #fff8e5; transform: translateY(-2px); }
+.ra-button-secondary:hover { background: #ffffff12; transform: translateY(-2px); }
+/* 노트/손/빛 고리/컵 로고가 완성된 정사각형 이미지를 크롭 없이 표시합니다. */
+.ra-art { position: relative; width: 100%; max-width: 600px; aspect-ratio: 1; margin: 0 auto; isolation: isolate; }
+.ra-scene { position: absolute; inset: 0; z-index: 0; display: block; width: 100%; height: 100%; object-fit: contain; pointer-events: none;
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent), linear-gradient(to bottom, transparent, #000 10%, #000 90%, transparent);
+  -webkit-mask-composite: source-in;
+  mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent), linear-gradient(to bottom, transparent, #000 10%, #000 90%, transparent);
+  mask-composite: intersect;
+}
+.ra-skip { position: absolute; top: -80px; left: 20px; z-index: 20; padding: 12px 20px; border-radius: 8px; background: var(--ra-cream); color: var(--ra-ink); }
+.ra-skip:focus { top: 12px; }
+/* [05 반응형] 576~991px 태블릿 / 992px 이상 PC 2열. 티켓은 공통 95%. */
+@media (min-width: 576px) and (max-width: 991.98px) {
+  .ra-canvas { padding-top: 110px; }
+  .ra-copy { width: calc(100% - 64px); }
+  .ra-eyebrow { font-size: 15px; }
+  .ra-title { font-size: 44px; }
+  .ra-art { max-width: 580px; }
+}
+/* PC에서도 같은 정사각형 일러스트와 네 방향 페이드를 유지합니다. */
+@media (min-width: 992px) {
+  .ra-hero { display: flex; align-items: center; }
+  .ra-nav { padding: 26px 0; }
+  .ra-nav-inner { width: 90%; }
+  .ra-brand-image { width: clamp(216px, 19vw, 300px); }
+  .ra-hero #raMenu { margin-top: 0; padding: 0; background: none; border: 0; border-radius: 0; box-shadow: none; }
+  .ra-menu { align-items: center; gap: clamp(22px, 3.2vw, 58px); }
+  .ra-nav-link, .ra-nav-signup { width: auto; padding: 8px 0; font-size: clamp(15px, 1.25vw, 21px); }
+  .ra-nav-signup { min-width: 10vw; padding: .65vw 1.8vw; margin-top: 0; }
+  .ra-canvas { display: grid; grid-template-columns: .95fr 1.05fr; align-items: center; gap: 0; width: 92%; padding: 125px 0 45px; }
+  .ra-copy { width: 100%; max-width: none; margin: 0; padding-left: 3%; }
+  .ra-eyebrow { margin-bottom: 1.3vw; gap: 1vw; font-size: clamp(15px, 1.4vw, 22px); }
+  .ra-eyebrow span { flex: none; max-width: none; width: 7vw; }
+  .ra-title { margin-bottom: 1.5vw; font-size: clamp(36px, 4.05vw, 65px); }
+  .ra-title-lead { margin-bottom: .2vw; font-size: .83em; }
+  .ra-ticket { margin-bottom: 1.4vw; }
+  .ra-description { margin-bottom: 1.8vw; font-size: clamp(15px, 1.35vw, 21px); line-height: 1.6; }
+  .ra-actions { gap: 1.3vw; }
+  .ra-button { flex: none; min-height: 50px; padding: .9vw 1.8vw; font-size: clamp(16px, 1.4vw, 21px); }
+  .ra-button-primary { min-width: 16vw; }
+  .ra-button-secondary { min-width: 13vw; }
+  .ra-art { width: 100%; max-width: none; margin: 0; }
+}
+@media (prefers-reduced-motion: no-preference) { .ra-copy { animation: ra-appear .65s ease-out both; } }
+@keyframes ra-appear { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+@media (prefers-reduced-motion: reduce) { .ra-hero *, .ra-hero *::before, .ra-hero *::after { animation: none !important; transition: none !important; } }
+.ra-preview-modal { font-family: "LINE Seed KR", sans-serif; }
+.ra-preview-modal .modal-content { border: 0; border-radius: 22px; background: #faf9ef; color: #02343f; }
+.ra-preview-modal .modal-header { border-bottom-color: #02343f18; }
+.ra-preview-modal .ra-preview-brand { display: block; width: 230px; max-width: 100%; height: auto; margin: 0 auto 20px; padding: 10px; border-radius: 10px; background: #00484a; }
+.ra-preview-modal .btn-teal { background: #02343f; border-color: #02343f; color: #f0edcc; border-radius: 28px; padding: 12px 20px; }
